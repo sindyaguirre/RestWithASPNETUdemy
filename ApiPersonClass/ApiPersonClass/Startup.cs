@@ -1,19 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ApiPersonClass.Business;
+using ApiPersonClass.Business.Implementation;
 using ApiPersonClass.Model.Context;
-using ApiPersonClass.Services;
-using ApiPersonClass.Services.Implementation;
+using ApiPersonClass.Repository;
+using ApiPersonClass.Repository.Implementation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace ApiPersonClass
 {
@@ -34,8 +29,13 @@ namespace ApiPersonClass
             services.AddDbContext<MySQLContext>(options => options.UseMySql(connection));
 
             services.AddMvc();
+
+            //este precisa ser instalado o pacote pelo Nuget, pesquisar por Microsoft.aspnetcore.versioning.
+            services.AddApiVersioning();
+
             //Dependenceb injection
-            services.AddScoped<IPersonService, PersonServiceImpl> ();
+            services.AddScoped<IPersonBusiness, PersonBusinessImpl>();
+            services.AddScoped<IPersonRepository, PersonRepositoryImpl>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
